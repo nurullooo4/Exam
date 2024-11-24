@@ -164,15 +164,15 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGOUT_REDIRECT_URL = reverse_lazy('login')
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env.str('GOOGLE_OAUTH2_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env.str('GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '24812785775-1amcm9vm34ij0arlet0j7vraj4gds3n7.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = env.str('HOST_USER')
-EMAIL_HOST_PASSWORD = env.str('HOST_PASSWORD')
+EMAIL_HOST_USER = 'helloword5661@gamil.com'
+EMAIL_HOST_PASSWORD = 'teuc iisw kayh ctyr'
 
 
