@@ -1,0 +1,158 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <main class="vh-100 bg-body-tertiary">
+        <div class="container m-auto mt-5 row gap-2 justify-content-center">
+            <h1 class="d-flex justify-content-center"
+                style="text-shadow: 0 0 20px #00fffb, 0 0 40px #0081bc;font-weight: 700;">Checkout</h1>
+            <section class="h-100 gradient-custom">
+                <div class="container py-2">
+                    <div class="row d-flex justify-content-center my-4">
+                        <div class="col-md-8">
+                            <div class="card mb-4">
+                                <div class="card-header py-3">
+                                    <h5 class="mb-0">Cart - {{ cart_items.count }} items</h5>
+                                </div>
+                                <div class="card-body">
+                                    {% for item in cart_items %}
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                                                <!-- Image -->
+                                                <div class="bg-image hover-overlay hover-zoom ripple rounded"
+                                                     data-mdb-ripple-color="light">
+                                                    <img src="{{ item.product.images.all.0.image.url }}" class="w-100"
+                                                         alt="{{ item.product.name }}"/>
+                                                    <a href="{% url 'product-detail' product_id=item.product.id %}">
+                                                        <div class="mask"
+                                                             style="background-color: rgba(251, 251, 251, 0.2)">
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                                                <a href="{% url 'product-detail' product_id=item.product.id %}">
+                                                    <p><strong>{{ item.product.name }}</strong></p>
+                                                </a>
+                                                <p>Description: {{ item.product.description | truncatechars:130 }}</p>
+                                            </div>
+
+                                            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                                                <div class="d-flex mb-4" style="max-width: 300px">
+                                                    <a href="{% url 'add_product_cart' item.product.id 'decrement' %}"
+                                                       class="btn btn-outline-primary px-3 me-2">
+                                                        <i class="fas fa-minus"></i>
+                                                    </a>
+
+                                                    <div class="form-outline">
+                                                        <p class="text-center">Quantity</p>
+                                                        <input
+                                                                id="form1"
+                                                                min="1"
+                                                                name="quantity"
+                                                                value="{{ item.quantity }}"
+                                                                type="number"
+                                                                class="form-control text-center"/>
+                                                        <label class="form-label" for="form1"></label>
+                                                    </div>
+
+                                                    <a href="{% url 'add_product_cart' item.product.id 'increment' %}"
+                                                       class="btn btn-outline-primary px-3 ms-2">
+                                                        <i class="fas fa-plus"></i>
+                                                    </a>
+                                                </div>
+                                                <p class="text-start text-md-center">
+                                                    <strong>${{ item.total_price }}</strong>
+                                                </p>
+                                                <a href="{% url 'delete_product_cart' item.product.id %}"
+                                                   class="btn btn-outline-danger btn-sm me-1 mb-3">
+                                                    <i class="bi bi-trash"></i> Delete Product
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                        <hr class="my-4"/>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <div class="card-header py-3">
+                                    <h5 class="mb-0">Summary</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                                            Products
+                                            <span>${{ total_price }}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                            Shipping
+                                            <span>$10.00</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                            <div>
+                                                <strong>Total amount</strong>
+                                                <strong><p class="mb-0">(including VAT)</p></strong>
+                                            </div>
+                                            <span><strong>${{ total_amount }}</strong></span>
+                                        </li>
+                                    </ul>
+                                    <button type="button" class="btn btn-outline-success btn-lg btn-block"
+                                            data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        Go to checkout
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                        {% if cart_items %}
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <p><strong>Expected shipping delivery</strong></p>
+                                <p class="mb-0">{{ today }} - {{ 10_days_later }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div class="modal" tabindex="-1" id="exampleModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thank you for your purchase !</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                {% if cart_items %}
+                    <div class="modal-body">
+                        {% for item in cart_items %}
+                            <p> {{ item.product.name|truncatechars:130 }} - <strong>{{ item.quantity }}</strong>
+                            </p>
+                        {% endfor %}
+                        <p>Total price:
+                            <span>${{ total_price }}</span> +
+                            Reach price: $10.00
+                        </p>
+                        <hr>
+                        <h2>Total amount:<span><strong>${{ total_amount }}</strong></span>
+                        </h2>
+                        <p class="mb-0">Delivery time:
+                            {{ today }} - {{ 10_days_later }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{% url 'checkout_delete' %}" type="button" class="btn btn-outline-success">Order</a>
+                    </div>
+                {% else %}
+                    <h2 class="text-center text-muted"><a href="{% url 'home' %}">Continue
+                        shopping</a>.</h2>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

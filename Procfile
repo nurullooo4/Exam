@@ -1,0 +1,1 @@
+web: gunicorn EXAM.wsgi --log-file -

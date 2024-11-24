@@ -1,0 +1,64 @@
+<nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">Online Store</a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item  d-flex align-items-center gap-1">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        <i class="bi bi-bank2" ></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'category' %}">
+                        <i class="bi bi-layers-fill"></i> Categories
+                    </a>
+                </li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-1" href="{% url 'account' request.user.id %}">
+                            <i class="bi bi-person"></i> Account
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-1" href="{% url 'cart' %}">
+                            <i class="bi bi-cart4"></i> My Cart
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+            <div class="d-flex align-items-center gap-2">
+                <form class="d-flex" role="search" action="#" method="get">
+                    {% if is_home %}
+                        <input
+                                class="form-control me-2"
+                                type="search"
+                                placeholder="🔎 Search ..."
+                                aria-label="Search"
+                                name="q"
+                                value="{{ request.GET.q|default:'' }}"
+                        />
+                        <button class="btn btn-outline-dark" type="submit">
+                            Search
+                        </button>
+                    {% endif %}
+                </form>
+                {% if request.user.is_authenticated %}
+                    <a class="btn btn-outline-dark" href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a class="btn btn-outline-dark" href="{% url 'login' %}">Log/Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
