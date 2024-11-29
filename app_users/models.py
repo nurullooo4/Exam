@@ -14,7 +14,7 @@ class UserModel(AbstractUser):
                                    default='user-images/user-default.png',
                                    null=True, blank=True)
     is_admin = models.BooleanField(default=False)
-    is_customer = models.BooleanField(default=True)
+    is_customer = models.BooleanField(default=False)
 
     objects = UserModelManager()
 
@@ -42,7 +42,7 @@ class Admin(UserModel):
         self.is_customer = False
         self.is_admin = True
         self.is_staff = True
-        self.is_superuser = False
+        self.is_superuser = True
         super().save(*args, **kwargs)
 
 
