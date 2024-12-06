@@ -4,6 +4,7 @@ from django.db import models
 from app_users.managers import UserModelManager, CustomerManager, AdminManager
 
 
+
 class UserModel(AbstractUser):
     email = models.EmailField(max_length=255, unique=True)
     EMAIL_FIELD = 'email'
@@ -13,6 +14,7 @@ class UserModel(AbstractUser):
     user_image = models.ImageField(upload_to='user-images/',
                                    default='user-images/user-default.png',
                                    null=True, blank=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
     is_admin = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=False)
 
@@ -58,3 +60,13 @@ class Customer(UserModel):
         self.is_staff = False
         self.is_superuser = False
         super().save(*args, **kwargs)
+
+
+class Checkout(models.Model):
+    user = models.OneToOneField(UserModel, on_delete=models.CASCADE)
+    products = models.ManyToManyField('app_main.Product', related_name='checkout')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['created_at']

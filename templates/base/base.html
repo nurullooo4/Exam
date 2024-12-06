@@ -30,6 +30,16 @@
 <body class="d-flex flex-column">
 {% include 'components/_nav.html' %}
 
+ <!-- Foydalanuvchi xabarlarini ko'rsatish -->
+    {% if messages %}
+        <div class="container mt-3 text-center">
+            {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
 {% block content %} {% endblock content %}
 
 <!-- MDB -->

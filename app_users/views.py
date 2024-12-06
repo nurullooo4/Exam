@@ -3,14 +3,14 @@ from django.views.generic import CreateView, UpdateView
 from django.contrib.auth import get_user_model, logout
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
+
 from app_users.forms import UserCreationForm
-from app_users.models import UserModel
 
 User = get_user_model()
 
 
 class RegistrationView(CreateView):
-    model = UserModel
+    model = User
     template_name = 'app_users/registration.html'
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
@@ -48,3 +48,4 @@ class AccountView(UpdateView):
     def get_object(self, queryset=None):
         user_id = self.kwargs.get(self.pk_url_kwarg)
         return get_object_or_404(User, id=user_id)
+

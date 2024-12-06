@@ -1,14 +1,14 @@
 from django import forms
+from django.contrib.auth import get_user_model
 
-from app_users.models import UserModel
-
+User = get_user_model()
 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput, label="Password")
     password2 = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
 
     class Meta:
-        model = UserModel
+        model = User
         fields = ('first_name', 'last_name', 'email', 'password1', 'password2')
 
     def clean_password2(self):

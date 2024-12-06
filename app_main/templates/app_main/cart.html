@@ -108,12 +108,12 @@
                             </div>
                         </div>
                         {% if cart_items %}
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <p><strong>Expected shipping delivery</strong></p>
-                                <p class="mb-0">{{ today }} - {{ 10_days_later }}</p>
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <p><strong>Expected shipping delivery</strong></p>
+                                    <p class="mb-0">{{ today }} - {{ 10_days_later }}</p>
+                                </div>
                             </div>
-                        </div>
                         {% endif %}
                     </div>
                 </div>
@@ -125,31 +125,33 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Thank you for your purchase !</h5>
+                    <h5 class="modal-title">Thank you for your purchase!</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 {% if cart_items %}
                     <div class="modal-body">
                         {% for item in cart_items %}
-                            <p> {{ item.product.name|truncatechars:130 }} - <strong>{{ item.quantity }}</strong>
-                            </p>
+                            <p>{{ item.product.name|truncatechars:130 }} - <strong>{{ item.quantity }}</strong></p>
                         {% endfor %}
                         <p>Total price:
                             <span>${{ total_price }}</span> +
                             Reach price: $10.00
                         </p>
                         <hr>
-                        <h2>Total amount:<span><strong>${{ total_amount }}</strong></span>
-                        </h2>
+                        <h2>Total amount:<span><strong>${{ total_amount }}</strong></span></h2>
                         <p class="mb-0">Delivery time:
                             {{ today }} - {{ 10_days_later }}</p>
                     </div>
                     <div class="modal-footer">
-                        <a href="{% url 'checkout_delete' %}" type="button" class="btn btn-outline-success">Order</a>
+                        <form method="POST" action="{% url 'checkout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-success btn-lg btn-block">
+                                Order
+                            </button>
+                        </form>
                     </div>
                 {% else %}
-                    <h2 class="text-center text-muted"><a href="{% url 'home' %}">Continue
-                        shopping</a>.</h2>
+                    <h2 class="text-center text-muted"><a href="{% url 'home' %}">Continue shopping</a>.</h2>
                 {% endif %}
             </div>
         </div>

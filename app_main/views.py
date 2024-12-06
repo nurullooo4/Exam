@@ -1,12 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from datetime import date, timedelta
-
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404
+from django.db.models import Q, F, Sum
+from django.contrib import messages
+
 
 from app_main.models import Category, Product, Cart
-from django.db.models import Q
+from app_users.models import Checkout
 
 
 class HomeView(ListView):
@@ -159,7 +161,25 @@ def add_product_cart(request, product_id, action):
     return redirect('cart')
 
 
-def checkout_delete(request):
-    cart_all = Cart.objects.filter(user=request.user)
-    cart_all.delete()
+@login_required
+def save_checkout(request):
+    if request.method == "POST":
+        # Foydalanuvchiga tegishli Checkout modelini olish yoki yaratish
+        checkout, created = Checkout.objects.get_or_create(user=request.user)
+
+        # Tanlangan mahsulotlarni olish
+        product_ids = request.POST.getlist('product_ids')
+
+        if product_ids:
+            products = Product.objects.filter(id__in=product_ids)
+            checkout.products.add(*products)
+
+        messages.success(request, 'Your order has been successfully placed!')
+
+        # Savatdagi barcha mahsulotlarni o'chirish
+        cart_items = Cart.objects.filter(user=request.user)  # Cart modelini to'g'ri nom bilan almashtiring
+        cart_items.delete()  # Cartdagi barcha mahsulotlarni o'chiradi
+
+        return redirect('home')
+
     return redirect('home')

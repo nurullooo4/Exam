@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 
-from app_users.models import UserModel, Customer, Admin
+from app_users.models import UserModel, Customer, Admin, Checkout
 
 admin.site.unregister(Group)
 admin.site.register(Admin)
@@ -21,5 +21,12 @@ class CustomerAdmin(admin.ModelAdmin):
     list_display = ['id', 'full_name', 'email']
     list_display_links = ['email']
     search_fields = ['full_name']
+    save_on_top = True
+    list_per_page = 3
+
+@admin.register(Checkout)
+class CheckoutAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'updated_at']
+    search_fields = ['user']
     save_on_top = True
     list_per_page = 3
